@@ -1,0 +1,23 @@
+/* Views */
+#add-wish-view{
+    display: none;
+}
+#add-wish-view input{
+    margin-bottom: 1rem;
+}
+#edit-delete-view{
+    display: none;
+}
+
+/* navbar */
+.active{
+    background-color: pink;
+}
+
+/* table */
+table.table tr.important td{
+    background-color: pink;
+}
+th, td{
+    text-align: center;
+}

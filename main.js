@@ -1,124 +1,194 @@
+// helpers
+let index = null;
 // views
-let allWishView = document.querySelector("#all-wish-view");
-let editDeleteView = document.querySelector("#edit-delete-view");
-let allWishTbody = allWishView.querySelector("tbody");
-let EditDeleteWishTbody = editDeleteView.querySelector("tbody");
-let addWishView = document.querySelector("#add-wish-view");
+let allWishView = document.querySelector('#all-wish-view');
+let allWishTbody = allWishView.querySelector('tbody');
+let addWishView = document.querySelector('#add-wish-view');
+let editDeleteView = document.querySelector('#edit-delete-view');
+let editDeleteTbody = editDeleteView.querySelector('tbody');
+let editWishView = document.querySelector('#edit-wish-view');
 
 // buttons
-let addWishBtn = document.querySelector("#add-wish-btn");
-let allWishBtn = document.querySelector("#all-wish-btn");
-let saveBtn = document.querySelector("#save-btn");
-let allNavLinks = document.querySelectorAll("nav .nav-link");
-let editDeleteBtn = document.querySelector("#edit-delete-btn");
+let allWishBtn = document.querySelector('#all-wish-btn');
+let addWishBtn = document.querySelector('#add-wish-btn');
+let saveBtn = document.querySelector('#save-btn')
+let editDeleteBtn = document.querySelector('#edit-delete-btn');
+let allNavLinks = document.querySelectorAll('.nav-item a');
+let updateBtn = document.querySelector('#update-btn');
 
-// event listeners
+// inputs
+let idInput = document.querySelector('input[name="id"]');
+let itemInput = document.querySelector('input[name="item"]');
+let priceInput = document.querySelector('input[name="price"]');
+let linkInput = document.querySelector('input[name="link"]');
+let sourceInput = document.querySelector('input[name="source"]');
+let importantInput = document.querySelector('input[name="important"]');
+let searchInput = document.querySelector('#search-input');
 
-addWishBtn.addEventListener('click', showAddWishView);
-allWishBtn.addEventListener('click', showAllWishView);
-editDeleteBtn.addEventListener('click', showEditDeleteView);
-saveBtn.addEventListener('click', saveNewWish);
-// allNavLinks.forEach(link => link.addEventListener('click', navActive));
+let eidInput = document.querySelector('input[name="eid"]');
+let eitemInput = document.querySelector('input[name="eitem"]');
+let epriceInput = document.querySelector('input[name="eprice"]');
+let elinkInput = document.querySelector('input[name="elink"]');
+let esourceInput = document.querySelector('input[name="esource"]');
+let eimportantInput = document.querySelector('input[name="eimportant"]');
 
-//inputs
+// listeners
+allWishBtn.addEventListener('click',showAllWishView)
+addWishBtn.addEventListener('click',showAddWishView);
+saveBtn.addEventListener('click',saveNewWish);
+editDeleteBtn.addEventListener('click',showEditDeleteView);
+allNavLinks.forEach(link => link.addEventListener('click',controlActive));
+updateBtn.addEventListener('click',updateWish);
+searchInput.addEventListener('input', searchDB);
 
-let idInput = addWishView.querySelector("input[name='id']");
-let itemInput = addWishView.querySelector("input[name='item']");
-let priceInput = addWishView.querySelector("input[name='price']");
-let linkInput = addWishView.querySelector("input[name='link']");
-let sourceInput = addWishView.querySelector("input[name='source']");
-let importantInput = addWishView.querySelector("input[name='important']");
+createWishTable()
 
-// functions
-
-createWishTable();
-
-
-
-function navActive(aTag) {
-    allNavLinks.forEach(link => {
-        link.classList.remove("active");
+function searchDB(){
+    let searchTerm = this.value.toLowerCase();
+    let filtered = wishes.filter(function (el){
+        return el.item.toLowerCase().includes(searchTerm) ||
+                el.price.includes(searchTerm) ||
+                el.source.toLowerCase().includes(searchTerm);
     })
-    aTag.classList.add("active");
+    createWishTable(filtered);
+}
+function updateWish(e){
+    console.log(index);
+    let updated = {
+        id : eidInput.value,
+        item : eitemInput.value,
+        price : epriceInput.value,
+        link : elinkInput.value,
+        important: eimportantInput.checked,
+        source : esourceInput.value
+    }
+
+        wishes[index] = updated;
+        createWishTable()
+        showAllWishView();
 }
 
-function showAddWishView(e) {
-    if(e){
-        e.preventDefault();
-    }
-    navActive(this);
-    addWishView.style.display = "block";
-    allWishView.style.display = "none";
-    editDeleteView.style.display = "none";
-}
- 
-function showAllWishView(e) {
-    if(e){
-        e.preventDefault();
-    }
-    navActive(this);
-    allWishView.style.display = "block";
-    addWishView.style.display = "none";
-    editDeleteView.style.display = "none";
-}
-
-function showEditDeleteView(e) {
-    if(e){
-        e.preventDefault();
-    }
-    navActive(this); 
-    editDeleteView.style.display = "block";
-    addWishView.style.display = "none";
-    allWishView.style.display = "none";
-}
-
-function saveNewWish(e) {
+function saveNewWish(e){
     let newWish = {
-        id: idInput.value,
-        item: itemInput.value,
-        price: priceInput.value,
+        id : idInput.value,
+        item : itemInput.value,
+        price : priceInput.value,
         link: linkInput.value,
-        important: importantInput.checked,
-        source: sourceInput.value
+        source : sourceInput.value,
+        important: importantInput.checked
     }
+
     wishes.push(newWish);
-    createWishTable(); 
+    createWishTable();
     showAllWishView();
 }
-function createWishTable() {
-    let text = "";
-    wishes.forEach(wish => {
-        (wish.important) ? importantMsg = "important" : importantMsg = "normal"
-        text += `   <tr class = "${importantMsg}">
-                            <td>${wish.id}</td>
-                            <td>${wish.item}</td>
-                            <td>${wish.price}</td>
-                            <td><a href="${wish.link}" class="btn btn-primary btn-sm">Link</a></td>
-                            <td>${importantMsg}</td>
-                            <td>${wish.source} </td>
-                        </tr>`.trim();
-                        
+
+function showAddWishView(e){
+//    controlActive(this) 
+    if(e) e.preventDefault();
+    addWishView.style.display = 'block';
+    allWishView.style.display = 'none';
+    editDeleteView.style.display = 'none';
+    editWishView.style.display = 'none';
+}
+
+function showEditDeleteView(e){
+    createEditDeleteTable()
+    // controlActive(this);
+    editDeleteView.style.display = 'block';
+    allWishView.style.display = 'none';
+    addWishView.style.display = 'none';
+    editWishView.style.display = 'none';
+}
+
+
+function showAllWishView(e){
+//   controlActive(this) 
+    if(e) e.preventDefault();
+    allWishView.style.display = 'block';
+    addWishView.style.display = 'none';
+    editDeleteView.style.display = 'none';
+    editWishView.style.display = 'none';
+}
+
+function showUpdateForm(e){
+    index = this.getAttribute('data-index');
+    let currentWish = wishes[index];
+
+    editWishView.style.display = 'block';
+    addWishView.style.display = 'none';
+    editDeleteView.style.display = 'none';
+    allWishView.style.display = 'none';
+
+    eidInput.value = currentWish.id;
+    eitemInput.value = currentWish.item;
+    epriceInput.value = currentWish.price;
+    elinkInput.value = currentWish.link;
+    esourceInput.value = currentWish.source;
+    
+    (currentWish.important) ? eimportantInput.setAttribute('checked',true) : false;
+}
+
+
+function createWishTable(filtered){
+    let text = '';
+    let importantMsg = '';
+    let data = filtered || wishes
+    data.forEach(wish => {
+        (wish.important) ? importantMsg = 'Important' : importantMsg = 'Normal';
+        text += `
+         <tr class="${importantMsg.toLowerCase()}">
+                        <td>${wish.id}</td>
+                        <td>${wish.item}</td>
+                        <td>${wish.price}</td>
+                        <td><a href="${wish.link}" class="btn btn-sm btn-info">Link</a></td>
+                        <td>${importantMsg}</td>
+                        <td>${wish.source}</td>
+                    </tr>
+        `.trim()
     })
     allWishTbody.innerHTML = text;
 }
-function createEditDeleteTable() {
-    let text = "";
-    wishes.forEach(wish => {
-        (wish.important) ? importantMsg = "important" : importantMsg = "normal"
-        text += `   <tr class = "${importantMsg}">
-                            <td>${wish.id}</td>
-                            <td>${wish.item}</td>
-                            <td>${wish.price}</td>
-                            <td><a href="${wish.link}" class="btn btn-primary btn-sm">Link</a></td>
-                            <td>${importantMsg}</td>
-                            <td>${wish.source} </td>
-                            <td>
-                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                            </td>
-                        </tr>`.trim();
-                        
+
+function createEditDeleteTable(filtered){
+    let text = '';
+    let importantMsg = '';
+    let data = filtered || wishes
+    data.forEach((wish,index) => {
+        (wish.important) ? importantMsg = 'Important' : importantMsg = 'Normal';
+        text += `
+         <tr class="${importantMsg.toLowerCase()}">
+                        <td>${wish.id}</td>
+                        <td>${wish.item}</td>
+                        <td>${wish.price}</td>
+                        <td><a href="${wish.link}" class="btn btn-sm btn-info">Link</a></td>
+                        <td>${importantMsg}</td>
+                        <td>${wish.source}</td>
+                        <td><button data-index="${index}" class="delete-btns btn btn-sm btn-danger me-2">Delete</button><button data-index="${index}" class="edit-btns btn btn-sm btn-warning">Edit</button></td>
+                    </tr>
+        `.trim()
     })
-    EditDeleteWishTbody.innerHTML = text;
+    editDeleteTbody.innerHTML = text;
+    let allDeleteBtns = document.querySelectorAll('.delete-btns');
+    let allEditBtns = document.querySelectorAll('.edit-btns');
+
+    allDeleteBtns.forEach((btn,index) => {
+        btn.addEventListener('click',deleteWish);
+        allEditBtns[index].addEventListener('click',showUpdateForm);
+    }) 
 }
-createEditDeleteTable();
+
+function deleteWish(){
+    let index = this.getAttribute('data-index');
+    wishes.splice(index,1);
+    createWishTable();
+    showAllWishView();
+}
+
+function controlActive(e){
+ allNavLinks.forEach(link => {
+        link.classList.remove('active');
+    })
+
+    this.classList.add('active');
+}

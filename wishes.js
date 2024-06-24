@@ -1,26 +1,26 @@
 let wishes = [
     {
-        id: 1,
-        item: 'iPhone',
-        price: '$999',
-        link: 'https://www.iphone.com',
+        id : 1,
+        item : "iPhone 12",
+        price : "900e",
+        link : 'https://danilovesovic.com',
+        important: false,
+        source : "Olx"
+    },
+    {
+        id : 2,
+        item : "Macbook Air",
+        price : "1900e",
+        link : 'http://hdlkaj.com',
         important: true,
-        source: 'Olx'
+        source : "KP"
     },
     {
-        id: 2,
-        item: 'iPhone',
-        price: '$999',
-        link: 'https://www.iphone.com',
+        id : 2,
+        item : "Macbook Air",
+        price : "1850e",
+        link : 'http://hdlkaj.com',
         important: false,
-        source: 'Olx'
-    },
-    {
-        id: 3,
-        item: 'iPhone',
-        price: '$999',
-        link: 'https://www.iphone.com',
-        important: false,
-        source: 'Olx'
+        source : "Olx"
     }
-]
+];

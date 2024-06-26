@@ -1,3 +1,8 @@
+window.addEventListener('beforeunload', save);
+function save(){
+    localStorage.db = JSON.stringify(wishes);
+}
+
 // helpers
 let index = null;
 // views
